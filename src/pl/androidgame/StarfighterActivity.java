@@ -1,0 +1,40 @@
+package pl.androidgame;
+
+import pl.androidgame.starfighter.R;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
+import android.view.WindowManager;
+
+public class StarfighterActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		SFEngine.display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+				.getDefaultDisplay();
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.starfighter);
+		
+		new Handler().postDelayed(new Thread() {
+			@Override
+			public void run() {
+				Intent mainMenu = new Intent(StarfighterActivity.this, 
+						SFMainMenu.class);
+				StarfighterActivity.this.startActivity(mainMenu);
+				StarfighterActivity.this.finish();
+				overridePendingTransition(R.layout.fadein, R.layout.fadeout);
+			}
+		}, SFEngine.GAME_THREAD_DELAY);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.starfighter, menu);
+		return true;
+	}
+
+}
